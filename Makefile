@@ -8,6 +8,8 @@ build-22.04:
 	docker build -t linux-kernel-player:22.04 -f Dockerfile.22.04 .
 
 echo-cmd:
+	# for x86 ttyS0
+	# for arm ttyAMA0
 	@echo "qemu-system-x86_64 -nographic -kernel ./arch/x86_64/boot/bzImage -append console=ttyS0"
 	@echo "qemu-system-aarch64 -machine virt -cpu cortex-a57 -nographic -kernel ./arch/arm64/boot/Image.gz --append console=ttyAMA0"
 
@@ -22,7 +24,7 @@ run-3.19: build echo-cmd
 
 
 run-5.15.80: build-22.04 echo-cmd
-		docker run --rm -it --volume=${PWD}/linux-5.15.80:/code:rw docker.io/library/linux-kernel-player:22.04 bash
+		docker run --rm -it --volume=${PWD}/linux-6.0.10:/code:rw docker.io/library/linux-kernel-player:22.04 bash
 
 run: run-5.15.80
 	@echo ""
