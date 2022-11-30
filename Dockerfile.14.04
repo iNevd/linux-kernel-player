@@ -1,0 +1,20 @@
+FROM ubuntu:14.04
+#
+# build linux-2.6.39
+# with gcc-4.8 ✓
+# with gcc-5 × kernel/bounds.c:1:0: error: code model kernel does not support PIC mode
+#
+# build linux-3.19
+# with gcc-4.8 ✓
+# with gcc-5 ✓
+#
+
+# ubuntu:14.04 默认 gcc-4.8.4 
+RUN	apt-get update \
+	&& apt-get -y install libncurses5-dev gdb qemu make dos2unix bc \
+	&& DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential kernel-package \
+	&& apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir /code
+
+WORKDIR /code
