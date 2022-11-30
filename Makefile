@@ -24,7 +24,8 @@ run-3.19: build echo-cmd
 
 
 run-5.15.80: build-22.04 echo-cmd
-		docker run --rm -it --volume=${PWD}/linux-6.0.10:/code:rw docker.io/library/linux-kernel-player:22.04 bash
+	# docker run --rm -it --volume=${PWD}/linux-5.15.80:/code:rw docker.io/library/linux-kernel-player:22.04 bash
+	docker run --rm -it --volume=${PWD}/linux-6.0.10:/code:rw docker.io/library/linux-kernel-player:22.04 bash
 
 run: run-5.15.80
 	@echo ""
