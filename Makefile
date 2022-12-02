@@ -16,21 +16,29 @@ UbuntuVersion := 18.04
 # 获取 LinuxKernelDir 绝对路径
 LinuxKernelDir := $(shell realpath $(LinuxKernelDir))
 
+CHECK_IMAGE := $(shell $(ContainerEngine) images -q linux-kernel-player:$(UbuntuVersion) 2>/dev/null)
+
+
 build:
-	docker build -t linux-kernel-player:$(UbuntuVersion) -f Dockerfile.$(UbuntuVersion) .
+ifeq ($(CHECK_IMAGE), )
+	$(ContainerEngine) build -t linux-kernel-player:$(UbuntuVersion) -f Dockerfile.$(UbuntuVersion) .
+endif
+	
 
 echo-cmd:
+	# make allnoconfig
+	# make menuconfig
+	# make -j 4
 ifeq ($(ARCH), x86_64)
 	# for x86 ttyS0
-	@echo "qemu-system-x86_64 -nographic -kernel ./arch/x86_64/boot/bzImage -append console=ttyS0"
+	# qemu-system-x86_64 -nographic -kernel ./arch/x86_64/boot/bzImage -append console=ttyS0
 endif
 ifeq ($(ARCH), aarch64)
 	# for arm ttyAMA0
-	@echo "qemu-system-aarch64 -machine virt -cpu cortex-a57 -nographic -kernel ./arch/arm64/boot/Image.gz --append console=ttyAMA0"
+	# qemu-system-aarch64 -machine virt -cpu cortex-a57 -nographic -kernel ./arch/arm64/boot/Image.gz --append console=ttyAMA0
 endif
 
 run: build echo-cmd
-	@echo "run:$(ContainerEngine) with arch:$(ARCH)  ubuntu:$(UbuntuVersion) linux kernel:$(LinuxKernelDir)"
+	@echo "\nrun:$(ContainerEngine) with arch:$(ARCH)  ubuntu:$(UbuntuVersion) linux kernel:$(LinuxKernelDir)\n"
 	$(ContainerEngine) run --rm -it --volume=$(LinuxKernelDir):/code:rw docker.io/library/linux-kernel-player:$(UbuntuVersion) bash
-	@echo ""
 	
