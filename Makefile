@@ -6,9 +6,10 @@ ARCH := aarch64
 ContainerEngine := docker
 # LinuxKernelDir 支持 linux-2.6.39 linux-3.19 linux-5.15.80 linux-6.0.10
 LinuxKernelDir := linux-3.19
-# UbuntuVersion 支持 14.04 18.04 22.04
+# UbuntuVersion 支持 14.04 16.04 18.04 22.04
 UbuntuVersion := 18.04
 # 14.04: linux-2.6.39
+# 16.04: linux-3.19
 # 18.04: linux-3.19
 # 22.04: linux-5.15.80 linux-6.0.10
 
